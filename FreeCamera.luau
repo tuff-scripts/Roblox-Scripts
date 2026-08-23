@@ -22,6 +22,8 @@ local scriptable = Enum.CameraType.Scriptable
 local lastSpeed = 0 
 local lastJump = 0 
 local lastType = false
+local wasFirstPerson = false
+local lastMinZoom, lastMaxZoom = 0.5, 128
 
 -- State tracking
 local pitch = 0
@@ -62,6 +64,17 @@ end
 local toggleBtn = false
 updateSensitivity()
 UserSettings:GetPropertyChangedSignal("MouseSensitivity"):Connect(updateSensitivity)
+
+local function resetCharacterTransparency(char)
+    if not char then return end
+    for _, part in ipairs(char:GetDescendants()) do
+        if part:IsA("BasePart") or part:IsA("Decal") then
+            if part.Name ~= "HumanoidRootPart" then
+                part.LocalTransparencyModifier = 0
+            end
+        end
+    end
+end
 
 local function setupCharacter(char)
     local hum = char:WaitForChild("Humanoid", 10)
@@ -132,7 +145,7 @@ local dragBar = new("TextLabel", mainFrame, {
     Position = UDim2.new(0, 0, 0, 0),
     BackgroundColor3 = Color3.fromRGB(45, 45, 45),
     BackgroundTransparency = 0.1,
-    Text = "  Freecam Control",
+    Text = "    Free Camera 🔥",
     TextColor3 = Color3.new(1, 1, 1),
     TextXAlignment = Enum.TextXAlignment.Left,
     Font = Enum.Font.SourceSansBold,
@@ -225,6 +238,7 @@ local function toggle()
     
     local char = plr.Character
     local hum = char and char:FindFirstChild("Humanoid")
+    local head = char and char:FindFirstChild("Head")
     
     if not active then 
         if lastConn then lastConn:Disconnect() lastConn = false end 
@@ -236,6 +250,19 @@ local function toggle()
             hum.WalkSpeed = lastSpeed 
             hum.JumpPower = lastJump 
         end
+        
+        if wasFirstPerson then
+            plr.CameraMinZoomDistance = 0.5
+            plr.CameraMaxZoomDistance = 0.5
+            task.defer(function()
+                plr.CameraMinZoomDistance = lastMinZoom
+                plr.CameraMaxZoomDistance = lastMaxZoom
+            end)
+        else
+            plr.CameraMinZoomDistance = lastMinZoom
+            plr.CameraMaxZoomDistance = lastMaxZoom
+        end
+
         UIS.MouseBehavior = Enum.MouseBehavior.Default
         cameraTouchInput = nil
         return 
@@ -251,6 +278,17 @@ local function toggle()
         hum.WalkSpeed = 0 
         hum.JumpPower = 0
     end
+    
+    lastMinZoom = plr.CameraMinZoomDistance
+    lastMaxZoom = plr.CameraMaxZoomDistance
+    
+    if head then
+        wasFirstPerson = (camera.CFrame.Position - head.Position).Magnitude < 2
+    else
+        wasFirstPerson = false
+    end
+
+    plr.CameraMinZoomDistance = 5
     
     camPos = camera.CFrame.Position
     local rx, ry, _ = camera.CFrame:ToOrientation()
@@ -302,6 +340,8 @@ local function toggle()
     end)
     
     lastConn = RNS.RenderStepped:Connect(function(dt)
+        resetCharacterTransparency(plr.Character)
+
         if smoothCam then
             local rampUp = 1 - math.exp(-10 * dt)
             local damping = math.exp(-8 * dt)
