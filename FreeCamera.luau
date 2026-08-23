@@ -286,7 +286,7 @@ local function toggle()
                 targetVelPitch = targetVelPitch - (delta.Y * sY * 7.5)
             else
                 yaw = yaw - (delta.X * sX)
-                pitch = math.clamp(pitch - (delta.Y * sY), -89, 89)
+                pitch = pitch - (delta.Y * sY)
                 targetVelYaw = -(delta.X * sX * 7.5)
                 targetVelPitch = -(delta.Y * sY * 7.5)
                 velYaw = targetVelYaw
@@ -310,7 +310,7 @@ local function toggle()
             velPitch = velPitch + (targetVelPitch - velPitch) * rampUp
             
             yaw = yaw + (velYaw * dt)
-            pitch = math.clamp(pitch + (velPitch * dt), -89, 89)
+            pitch = pitch + (velPitch * dt)
             
             targetVelYaw = targetVelYaw * damping
             targetVelPitch = targetVelPitch * damping
