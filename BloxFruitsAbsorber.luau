@@ -62,4 +62,4 @@ wait(1)
 for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
 
-warn("Executed🤔") wait(1) print("Hop") qtp("loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()") hop()
+warn("Executed🤔") wait(1) plr.OnTeleport:Connect(function() qtp("loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()") end) print("Hop") hop()
