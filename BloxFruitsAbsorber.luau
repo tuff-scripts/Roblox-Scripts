@@ -1,7 +1,7 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔🤔5") wait(1)
+warn("🤔🤔🤔5.2") wait(1)
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -23,7 +23,7 @@ if not inter then getgenv().InteractedFruits = {} inter = getgenv().InteractedFr
 local collected = false local hopped = 0 local timeStart = false
 if BloxFruitsAbsorber then
   collected = BloxFruitsAbsorber.Collected
-  hopped = BloxFruitsAbsorber.Servers
+  hopped = 1 + BloxFruitsAbsorber.Servers
   timeStart = BloxFruitsAbsorber.TimeStart
 else
   collected = {}
@@ -68,7 +68,7 @@ local function getFruit(f)
   if f.Parent ~= char then return end
   local spl = string.split(f.Name, " ")
   local name = "Unknown" if spl and 0 ~= #spl then name = spl[1] end
-  if true == cmd:InvokeServer("StoreFruit", f:GetAttribute("OriginalName"), f) then print("Picked up "..name.." Fruit!") return true end
+  if true == cmd:InvokeServer("StoreFruit", f:GetAttribute("OriginalName"), f) then if collected[name] then collected[name] += 1 else collected[name] = 1 end return true end
   inter[f] = true f.EatRemote:InvokeServer("Drop") f:Destroy() end
 wait(1)
 for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
