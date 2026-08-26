@@ -1,7 +1,7 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔🤔5.3") wait(1)
+warn("🤔🤔🤔5.4") wait(1)
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -22,7 +22,7 @@ local inter = getgenv().InteractedFruits
 if not inter then getgenv().InteractedFruits = {} inter = getgenv().InteractedFruits end
 local collected = false local hopped = 0 local timeStart = false
 if BloxFruitsAbsorber then
-  collected = BloxFruitsAbsorber.Collected
+  collected = HTTPSERV:JSONDecode(BloxFruitsAbsorber.Collected)
   hopped = 1 + BloxFruitsAbsorber.Servers
   timeStart = BloxFruitsAbsorber.TimeStart
 else
