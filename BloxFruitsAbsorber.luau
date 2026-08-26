@@ -1,6 +1,6 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 if not fti then warn("Your executor don't support functions required for this script to run.") return end
-
+warn("🤔🤔🤔")
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
