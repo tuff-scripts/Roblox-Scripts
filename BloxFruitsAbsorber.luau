@@ -54,14 +54,15 @@ end
 --Fruits
 local function getFruit(f)
   if not (f and rp) or inter[f] then return end
-  local handle = f:FindFirstChild("Handle") if not handle then return end fti(handle, rp, 0)
-  if f.Parent ~= char then if f.Parent ~= workspace then return end f:GetPropertyChangedSignal("Parent"):Wait() if f.Parent ~= char then return end end
+  local handle = f:FindFirstChild("Handle") if not handle then return end
+  while f.Parent ~= char and f.Parent == workspace do fti(handle, rp, 0) end
+  if f.Parenr ~= char then return end
   local spl = string.split(f.Name, " ")
   local name = "Unknown" if spl and 0 ~= #spl then name = spl[1] end
   if true == cmd:InvokeServer("StoreFruit", f:GetAttribute("OriginalName"), f) then print("Picked up "..name.." Fruit!") return true end
   inter[f] = true f.EatRemote:InvokeServer("Drop") end
 wait(1)
-for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
+for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end print(0) getFruit(c) print(1) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
 
 warn("Executed🤔")
