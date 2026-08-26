@@ -55,8 +55,8 @@ end
 local function getFruit(f)
   if not (f and rp) or inter[f] then return end
   local handle = f:FindFirstChild("Handle") if not handle then return end
-  while f.Parent ~= char and f.Parent == workspace do fti(handle, rp, 0) end
-  if f.Parenr ~= char then return end
+  while f.Parent ~= char and f.Parent == workspace do fti(handle, rp, 0) wait() end
+  if f.Parent ~= char then return end
   local spl = string.split(f.Name, " ")
   local name = "Unknown" if spl and 0 ~= #spl then name = spl[1] end
   if true == cmd:InvokeServer("StoreFruit", f:GetAttribute("OriginalName"), f) then print("Picked up "..name.." Fruit!") return true end
