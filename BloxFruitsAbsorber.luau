@@ -49,7 +49,7 @@ local function hop()
   end
 end
 local function getQtpData()
-  return "print('Arrived!')"
+  return "loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()"
 end
 --Fruits
 local function getFruit(f)
