@@ -56,9 +56,9 @@ local function getFruit(f)
   local spl = string.split(f.Name, " ")
   local name = "Unknown" if spl and 0 ~= #spl then name = spl[1] end
   if true == cmd:InvokeServer("StoreFruit", f:GetAttribute("OriginalName"), f) then print("Picked up "..name.." Fruit!") return true end
-  inter[f] = true f.EatRemote:InvokeServer("Drop") end
+  inter[f] = true f.EatRemote:InvokeServer("Drop") f:Destroy() end
 wait(1)
-for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end print(0) getFruit(c) print(1) end
+for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
 
 warn("Executed🤔") wait(1) print("Hop") hop()
