@@ -1,6 +1,5 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
-local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
-if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
+if not fti then warn("Your executor don't support functions required for this script to run.") return end
 
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
@@ -48,14 +47,11 @@ local function hop()
     task.wait(3)
   end
 end
-local function getQtpData()
-  return "loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()"
-end
 --Fruits
 local function getFruit(f)
   if not (f and rp) or inter[f] then return end
   local handle = f:FindFirstChild("Handle") if not handle then return end
-  while f.Parent ~= char and f.Parent == workspace do fti(handle, rp, 0) wait() end
+  while f.Parent ~= char and f.Parent == workspace do fti(handle, rp, 0) wait(0.05) fti(handle, rp, 1) end
   if f.Parent ~= char then return end
   local spl = string.split(f.Name, " ")
   local name = "Unknown" if spl and 0 ~= #spl then name = spl[1] end
@@ -65,5 +61,4 @@ wait(1)
 for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end print(0) getFruit(c) print(1) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
 
-warn("Executed🤔")
-wait(1) plr.OnTeleport:Connect(function() qtp(getQtpData()) end) print("Hop") hop()
+warn("Executed🤔") wait(1) print("Hop") hop()
