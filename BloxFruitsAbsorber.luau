@@ -1,8 +1,7 @@
-if BloxFruitsAbsorber then return end getgenv().BloxFruitsAbsorber = true
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔🤔4.1") wait(1)
+warn("🤔🤔🤔5") wait(1)
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -21,6 +20,15 @@ plr.CharacterAdded:Connect(function(c) char:WaitForChild("CharacterReady") rp = 
 
 local inter = getgenv().InteractedFruits
 if not inter then getgenv().InteractedFruits = {} inter = getgenv().InteractedFruits end
+local collected = false local hopped = 0 local timeStart = false
+if BloxFruitsAbsorber then
+  collected = BloxFruitsAbsorber.Collected
+  hopped = BloxFruitsAbsorber.Servers
+  timeStart = BloxFruitsAbsorber.TimeStart
+else
+  collected = {}
+  timeStart = os.clock()
+end
 
 --Server
 local placeId = game.PlaceId
@@ -50,7 +58,7 @@ local function hop()
   end
 end
 local function getQtp()
-  return "loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()"
+  return "if BloxFruitsAbsorber then return end getgenv().BloxFruitsAbsorber = {Collected = "..HTTPSERV:JSONEncode(collected)..", Hopped = "..hopped..", TimeStart = "..timeStart.."} loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()"
 end
 --Fruits
 local function getFruit(f)
@@ -66,5 +74,10 @@ wait(1)
 for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
 
+print("Data:")
+print("  Serverhops: "..hopped)
+print("  TimeElapsed: "..(os.clock()-timeStart)//1)
+print("  Different Fruits: "..#collected)
+wait(5)
 plr.OnTeleport:Connect(function() qtp(getQtp()) end)
 warn("Executed🤔") wait(1) print("Hop") hop()
