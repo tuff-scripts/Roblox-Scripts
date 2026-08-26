@@ -1,7 +1,6 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
-local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
-if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔2")
+if not fti then warn("Your executor don't support functions required for this script to run.") return end
+warn("🤔🤔3")
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -62,4 +61,4 @@ wait(1)
 for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
 
-warn("Executed🤔") wait(1) plr.OnTeleport:Connect(function() qtp("loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()") end) print("Hop") hop()
+warn("Executed🤔") wait(1) print("Hop") hop()
