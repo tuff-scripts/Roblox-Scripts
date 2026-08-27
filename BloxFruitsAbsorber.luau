@@ -1,7 +1,7 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔🤔5.5") wait(1)
+warn("🤔🤔🤔6.0") wait(1)
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -20,13 +20,13 @@ plr.CharacterAdded:Connect(function(c) char:WaitForChild("CharacterReady") rp = 
 
 local inter = getgenv().InteractedFruits
 if not inter then getgenv().InteractedFruits = {} inter = getgenv().InteractedFruits end
-local collected = false local hopped = 0 local timeStart = false
+local collected = false local dropped = false local hopped = 0 local timeStart = false
 if BloxFruitsAbsorber then
-  collected = HTTPSERV:JSONDecode(BloxFruitsAbsorber.Collected)
+  collected = HTTPSERV:JSONDecode(BloxFruitsAbsorber.Collected) dropped = HTTPSERV:JSONDecode(BloxFruitsAbsorber.Dropped)
   hopped = 1 + BloxFruitsAbsorber.Servers
   timeStart = BloxFruitsAbsorber.TimeStart
 else
-  collected = {}
+  collected = {} dropped = {}
   timeStart = os.clock()
 end
 
@@ -49,7 +49,8 @@ local function hop()
     while len > 0 do
       local idx = math.random(1, len)
       local jobId = servers[idx].id
-      if browse:InvokeServer("teleport", jobId) then return end
+      local s1, s2 = pcall(function() return browse:InvokeServer("teleport", jobId) end)
+      if s1 and s2 then return end
       table.remove(servers, idx) 
       len = #servers
       task.wait(0.5)
@@ -58,7 +59,7 @@ local function hop()
   end
 end
 local function getQtp()
-  return "if BloxFruitsAbsorber then return end getgenv().BloxFruitsAbsorber = {Collected = '" .. HTTPSERV:JSONEncode(collected) .. "', Servers = " .. hopped .. ", TimeStart = " .. timeStart .. "} loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()"
+  return "if BloxFruitsAbsorber then return end getgenv().BloxFruitsAbsorber = {Collected = '" .. HTTPSERV:JSONEncode(collected) .. "', Dropped = '" .. HTTPSERV:JSONEncode(dropped) .. "', Servers = " .. hopped .. ", TimeStart = " .. timeStart .. "} loadstring(game:HttpGet('https://raw.githubusercontent.com/tuff-scripts/Roblox-Scripts/refs/heads/main/BloxFruitsAbsorber.luau'))()"
 end
 --Fruits
 local function getFruit(f)
@@ -77,7 +78,14 @@ workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c
 print("Data:")
 print("  Serverhops: "..hopped)
 print("  TimeElapsed: "..(os.clock()-timeStart)//1)
-print("  Different Fruits: "..#collected)
+print("  Collected Fruits: ")
+for f, v in collected do
+  print("  -"..f.." X"..v)
+end
+print("  Dropped Fruits: ")
+for f, v in dropped do
+  print("  -"..f.." X"..v)
+end
 wait(5)
 plr.OnTeleport:Connect(function() qtp(getQtp()) end)
-warn("Executed🤔") wait(1) print("Hop") hop()
+warn("Executed🤔") print("Hop") hop()
