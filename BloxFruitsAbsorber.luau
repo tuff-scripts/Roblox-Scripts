@@ -1,7 +1,7 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔🤔6.4") wait(1)
+warn("🤔🤔🤔6.5") wait(1)
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -83,12 +83,12 @@ print("Data:")
 print("  Serverhops: "..hopped)
 print("  TimeElapsed: "..(os.clock()-timeStart)//1)
 print("  Collected Fruits:")
-for f, v in collected do
-  print("  -"..f.." X"..v)
+for n, a in collected do
+  print("  -"..n.." X"..a)
 end
 print("  Dropped Fruits:")
-for f, v in dropped do
-  print("  -"..f.." X"..v)
+for n, a in dropped do
+  print("  -"..n.." X"..a)
 end
 wait(5)
 plr.OnTeleport:Connect(function() qtp(getQtp()) end)
