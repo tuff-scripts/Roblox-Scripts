@@ -1,7 +1,7 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔🤔6.3") wait(1)
+warn("🤔🤔🤔6.4") wait(1)
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -41,7 +41,10 @@ local function hop()
     local s, res 
     while true do 
       s, res = HttpGet(url)
-      if s and res and res.data and #res.data > 0 then break end 
+      if s and res then
+        local data = res.data
+        if data and 0 ~= #data then break end
+      end
       task.wait(3) 
     end
     local servers = res.data 
@@ -70,7 +73,8 @@ local function getFruit(f)
   local spl = string.split(f.Name, " ")
   local name = "Unknown" if spl and 0 ~= #spl then name = spl[1] end
   if true == cmd:InvokeServer("StoreFruit", f:GetAttribute("OriginalName"), f) then if collected[name] then collected[name] += 1 else collected[name] = 1 end return true end
-  inter[f] = true f.EatRemote:InvokeServer("Drop") f:Destroy() if dropped[name] then dropped[name] += 1 return end dropped[name] = 1 end
+  inter[f] = true f.EatRemote:InvokeServer("Drop") f:Destroy() if dropped[name] then dropped[name] += 1 return end dropped[name] = 1
+end
 wait(1)
 for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
@@ -78,11 +82,11 @@ workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c
 print("Data:")
 print("  Serverhops: "..hopped)
 print("  TimeElapsed: "..(os.clock()-timeStart)//1)
-print("  Collected Fruits: ")
+print("  Collected Fruits:")
 for f, v in collected do
   print("  -"..f.." X"..v)
 end
-print("  Dropped Fruits: ")
+print("  Dropped Fruits:")
 for f, v in dropped do
   print("  -"..f.." X"..v)
 end
