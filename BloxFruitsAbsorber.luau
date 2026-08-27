@@ -1,7 +1,7 @@
 local fti = firetouchinterest or (syn and syn.fire_touch_interest) or (fluxus and fluxus.fire_touch_interest)
 local qtp = queueteleport or queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 if not (fti and qtp) then warn("Your executor don't support functions required for this script to run.") return end
-warn("🤔🤔🤔6.0") wait(1)
+warn("🤔🤔🤔6.1") wait(1)
 local TPSERV = game:GetService("TeleportService")
 local HTTPSERV = game:GetService("HttpService")
 local RS = game:GetService("ReplicatedStorage")
@@ -70,7 +70,7 @@ local function getFruit(f)
   local spl = string.split(f.Name, " ")
   local name = "Unknown" if spl and 0 ~= #spl then name = spl[1] end
   if true == cmd:InvokeServer("StoreFruit", f:GetAttribute("OriginalName"), f) then if collected[name] then collected[name] += 1 else collected[name] = 1 end return true end
-  inter[f] = true f.EatRemote:InvokeServer("Drop") f:Destroy() end
+  inter[f] = true f.EatRemote:InvokeServer("Drop") f:Destroy() if dropped[name] then dropped[name] += 1 return end dropped[name] = 1 end end
 wait(1)
 for _, c in pairs(workspace:GetChildren()) do if not (c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit")) then continue end getFruit(c) end
 workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c:FindFirstChild("Fruit") then getFruit(c) end end)
