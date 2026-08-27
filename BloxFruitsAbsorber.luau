@@ -77,7 +77,7 @@ workspace.ChildAdded:Connect(function(c) if c:GetAttribute("OriginalName") and c
 
 print("Data:")
 print("  Serverhops: "..hopped)
-print("  TimeElapsed: "..(os.clock()-timeStart)//1)
+print("  TimeElapsed: "..tostring((os.clock()-timeStart)//1).."s")
 print("  Collected Fruits: ")
 for f, v in collected do
   print("  -"..f.." X"..v)
